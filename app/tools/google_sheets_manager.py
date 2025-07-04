@@ -26,13 +26,10 @@ class GoogleSheetsManager:
         """
         Gets a worksheet by its name. If not found, creates a new one.
         """
-        if not self.spreadsheet:
-            raise ValueError("No spreadsheet is currently opened.")
-        
         try:
             return self.spreadsheet.worksheet(worksheet_name)
         except gspread.WorksheetNotFound:
-            logging.error(f"Worksheet '{worksheet_name}' not found. Creating a new worksheet.")
+            logging.info(f"Worksheet '{worksheet_name}' not found. Creating a new worksheet.")
             return self.spreadsheet.add_worksheet(title=worksheet_name, rows="100", cols="20")
 
     def get_rows(self, worksheet_name):
