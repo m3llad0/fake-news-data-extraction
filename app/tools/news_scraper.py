@@ -6,10 +6,24 @@ class NewsScraper:
     A class to scrape news articles using the newspaper3k library.
     """
     def __init__(self):
+        """
+        Initialize a NewsScraper instance with no loaded article.
+        """
         self.article = None
 
     def parse_article(self, url: str) -> dict:
-        """Parses the article to extract its content."""
+        """
+        Downloads and parses a news article from the given URL in Spanish, returning its main content and metadata.
+        
+        Parameters:
+            url (str): The URL of the news article to parse.
+        
+        Returns:
+            dict or None: A dictionary with the article's title, text, authors, publish date (as a string or None), and metadata if parsing is successful and the article is sufficiently long; otherwise, None.
+        
+        Raises:
+            ValueError: If the provided URL is empty.
+        """
         if not url:
             raise ValueError("URL cannot be empty.")
 

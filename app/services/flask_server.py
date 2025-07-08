@@ -3,10 +3,11 @@ from flask import Flask
 class FlaskServer:
     def __init__(self, name, config) -> None:
         """
-        Initializes the FlaskServer class with the necessary dependencies.
+        Initialize a FlaskServer instance with the application name and configuration.
         
-        :param name: The name of the Flask application.
-        :param config: The configuration object for the Flask application.
+        Parameters:
+            name (str): The name of the Flask application.
+            config: The configuration object used to set up the Flask application.
         """
         self.app_name = name
         self.env = config
@@ -14,9 +15,10 @@ class FlaskServer:
 
     def create_app(self):
         """
-        Creates and configures the Flask application.
+        Create and configure a Flask application instance with loaded environment settings, registered blueprints, and custom error handlers.
         
-        :return: Configured Flask application instance.
+        Returns:
+            Flask: The configured Flask application instance.
         """
         app = Flask(self.app_name)
 
@@ -31,30 +33,43 @@ class FlaskServer:
 
     def add_blueprint(self, blueprint, url_prefix=None):
         """
-        Adds a blueprint to the Flask application with an optional URL prefix.
-
-        :param blueprint: The blueprint to register.
-        :param url_prefix: (Optional) The URL prefix for the blueprint.
+        Adds a blueprint and optional URL prefix to be registered with the Flask application.
+        
+        Parameters:
+        	blueprint: The Flask blueprint to add.
+        	url_prefix: Optional URL prefix to associate with the blueprint.
         """
         self.blueprints.append((blueprint, url_prefix))
 
     def _register_blueprints(self, app):
         """
-        Registers all added blueprints to the Flask application with their URL prefixes.
-
-        :param app: The Flask application instance.
+        Register all stored blueprints with the Flask application, applying their associated URL prefixes.
         """
         for blueprint, url_prefix in self.blueprints:
             app.register_blueprint(blueprint, url_prefix=url_prefix)
 
     def _setup_error_handlers(self, app):
         """
-        Sets up custom error handlers for the application.
+        Configure the Flask app to return JSON responses for 404 and 500 HTTP errors.
+        
+        The 404 handler returns a JSON message indicating the resource was not found. The 500 handler returns a JSON message indicating an internal server error.
         """
         @app.errorhandler(404)
         def not_found_error(error):
+            """
+            Return a JSON response indicating a 404 Not Found error.
+            
+            Returns:
+                tuple: A dictionary with an error message and the HTTP 404 status code.
+            """
             return {"error": "Resource not found"}, 404
 
         @app.errorhandler(500)
         def internal_error(error):
+            """
+            Handle HTTP 500 errors by returning a JSON response indicating an internal server error.
+            
+            Returns:
+            	A tuple containing a JSON error message and the HTTP 500 status code.
+            """
             return {"error": "An internal error occurred"}, 500
