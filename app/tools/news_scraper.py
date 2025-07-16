@@ -7,19 +7,19 @@ class NewsScraper:
     """
     def __init__(self):
         """
-        Initialize a NewsScraper instance with no loaded article.
+        Initialize a NewsScraper instance with an empty article attribute.
         """
         self.article = None
 
     def parse_article(self, url: str) -> dict:
         """
-        Downloads and parses a news article from the given URL in Spanish, returning its main content and metadata.
+        Downloads and parses a Spanish-language news article from the specified URL, returning its main content and metadata.
         
         Parameters:
             url (str): The URL of the news article to parse.
         
         Returns:
-            dict or None: A dictionary with the article's title, text, authors, publish date (as a string or None), and metadata if parsing is successful and the article is sufficiently long; otherwise, None.
+            dict or None: A dictionary containing the article's title, text, authors, publish date (as a string or None), and metadata if parsing is successful and the article text is at least 100 characters long; otherwise, None.
         
         Raises:
             ValueError: If the provided URL is empty.

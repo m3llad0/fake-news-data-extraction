@@ -8,9 +8,9 @@ routes = Blueprint('routes', __name__)
 @routes.route('/', methods=['GET'])
 def scrape_news():
     """
-    Handles GET requests to scrape news articles from URLs listed in a Google Sheet and saves the extracted data to another worksheet.
+    Scrapes news articles from URLs listed in a Google Sheet and saves the extracted data to another worksheet.
     
-    Retrieves rows from the "Raw" worksheet, scrapes articles from URLs that have not yet been processed, appends the extracted article data to the "Scrapped data" worksheet, and marks the original row as processed. Returns a JSON response indicating success, or an error message if no rows are found or an exception occurs.
+    Processes each unprocessed row in the "Raw" worksheet by scraping article data from the specified URL, appending the results to the "Scrapped data" worksheet, and marking the original row as processed. Returns a JSON response indicating success, or an error message if no rows are found or if an exception occurs.
     """
     try:
         news_scraper = NewsScraper()

@@ -11,13 +11,13 @@ class GoogleSheetsManager:
     
     def __init__(self, spreadsheet_name=None):
         """
-        Initialize the GoogleSheetsManager with service account credentials and open the specified Google Spreadsheet by URL.
+        Initializes the GoogleSheetsManager with service account credentials and opens a Google Spreadsheet by its URL.
         
         Parameters:
         	spreadsheet_name (str, optional): The URL of the Google Spreadsheet to open.
         
         Raises:
-        	ValueError: If the service account path is not set in the configuration or if the spreadsheet cannot be opened.
+        	ValueError: If the service account path is missing in the configuration or if the spreadsheet cannot be opened.
         """
         if not Config.SERVICE_ACCOUNT:
             raise ValueError("Service account path is not set in the configuration.")
@@ -30,15 +30,15 @@ class GoogleSheetsManager:
         
     def get_worksheet(self, worksheet_name):
         """
-        Retrieve a worksheet by name from the opened spreadsheet, creating it if it does not exist.
+        Retrieves a worksheet by name from the opened spreadsheet, creating it with default size if it does not exist.
         
-        If the specified worksheet is not found, a new worksheet with 100 rows and 20 columns is created and returned.
+        If the worksheet does not exist, a new worksheet with 100 rows and 20 columns is created and returned.
         
         Parameters:
-            worksheet_name (str): The name of the worksheet to retrieve or create.
+            worksheet_name (str): Name of the worksheet to retrieve or create.
         
         Returns:
-            Worksheet: The requested or newly created worksheet object.
+            Worksheet: The existing or newly created worksheet object.
         
         Raises:
             ValueError: If no spreadsheet is currently opened.
@@ -51,37 +51,37 @@ class GoogleSheetsManager:
 
     def get_rows(self, worksheet_name):
         """
-        Return all records from the specified worksheet as a list of dictionaries.
+        Retrieve all rows from the specified worksheet as a list of dictionaries, with each dictionary mapping column headers to cell values.
         
         Parameters:
-            worksheet_name (str): The name of the worksheet to retrieve records from.
+            worksheet_name (str): Name of the worksheet to retrieve data from.
         
         Returns:
-            List[Dict[str, Any]]: A list where each item is a dictionary representing a row, with keys as column headers.
+            List[Dict[str, Any]]: List of row dictionaries keyed by column headers.
         """
         worksheet = self.get_worksheet(worksheet_name)
         return worksheet.get_all_records()
 
     def append_row(self, worksheet_name, row_data):
         """
-        Append a new row of data to the specified worksheet.
+        Appends a new row of cell values to the specified worksheet.
         
         Parameters:
-            worksheet_name (str): The name of the worksheet to append the row to.
-            row_data (list): The list of cell values to add as a new row.
+            worksheet_name (str): Name of the worksheet to append the row to.
+            row_data (list): List of values representing the new row to add.
         """
         worksheet = self.get_worksheet(worksheet_name)
         worksheet.append_row(row_data)
 
     def update_row(self, worksheet_name, row, col, value):
         """
-        Update the value of a specific cell in a worksheet.
+        Update the value of a specific cell in the given worksheet.
         
         Parameters:
-        	worksheet_name (str): The name of the worksheet to update.
-        	row (int): The 1-based row index of the cell.
-        	col (int): The 1-based column index of the cell.
-        	value: The new value to set in the specified cell.
+        	worksheet_name (str): Name of the worksheet to update.
+        	row (int): 1-based row index of the cell to update.
+        	col (int): 1-based column index of the cell to update.
+        	value: New value to set in the specified cell.
         """
         worksheet = self.get_worksheet(worksheet_name)
         worksheet.update_cell(row, col, value)
