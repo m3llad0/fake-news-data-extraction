@@ -4,9 +4,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
- class Config:
+class Config:
      """Base configuration class."""
      SERVICE_ACCOUNT = os.getenv("SERVICE_ACCOUNT_PATH")
+     SHEET_LINK = os.getenv("SHEET_LINK")
  
      @classmethod
      def validate(cls):
