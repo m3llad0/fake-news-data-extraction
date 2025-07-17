@@ -19,10 +19,12 @@ class GoogleSheetsManager:
         Raises:
         	ValueError: If the service account path is not set in the configuration or if the spreadsheet cannot be opened.
         """
-        if not Config.SERVICE_ACCOUNT:
+
+        SERVICE_ACCOUNT = Config.get_service_account()
+        if not SERVICE_ACCOUNT:
             raise ValueError("Service account path is not set in the configuration.")
         
-        self.client = gspread.service_account(filename=Config.SERVICE_ACCOUNT)
+        self.client = gspread.service_account_from_dict(SERVICE_ACCOUNT)
         try:
             self.spreadsheet = self.client.open_by_url(spreadsheet_name)
         except Exception as e:
