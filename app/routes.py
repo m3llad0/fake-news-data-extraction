@@ -112,12 +112,23 @@ def get_dataset():
 
 @routes.route('/health', methods=['GET'])
 def health_check():
+    checks = {}
+
     try:
         Config.validate()
-        return jsonify({"status": "ok"}), 200
+        checks["config"] = "ok"
     except ValueError as ve:
         logging.error(f"Configuration error: {ve}")
-        return jsonify({"error": str(ve)}), 500
+        checks["config"] = str(ve)
+        return jsonify({"status": "unhealthy", "checks": checks}), 500
+
+    try:
+        sheets_manager = GoogleSheetsManager(Config.SHEET_LINK)
+        worksheets = [ws.title for ws in sheets_manager.spreadsheet.worksheets()]
+        checks["google_sheets"] = {"status": "ok", "worksheets": worksheets}
     except Exception as e:
-        logging.error(f"Unexpected error: {e}")
-        return jsonify({"error": "Internal server error"}), 500
+        logging.error(f"Google Sheets connection error: {e}")
+        checks["google_sheets"] = {"status": "error", "detail": str(e)}
+        return jsonify({"status": "unhealthy", "checks": checks}), 500
+
+    return jsonify({"status": "ok", "checks": checks}), 200
